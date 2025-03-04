@@ -1,5 +1,5 @@
 #include <KamataEngine.h>
-
+#include "GameScene.h"
 using namespace KamataEngine;
 
 // Windowsアプリでのエントリーポイント(main関数)
@@ -14,7 +14,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
-	win->CreateGameWindow();
+	win->CreateGameWindow(L"GC1A_01_アサカワ_サクト_AL3");
 
 	// DirectX初期化処理
 	dxCommon = DirectXCommon::GetInstance();
@@ -51,6 +51,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	primitiveDrawer->Initialize();
 #pragma endregion
 
+	GameScene* gameScene_ = new GameScene;
+	gameScene_->Initialize();
+
 	// メインループ
 	while (true) {
 		// メッセージ処理
@@ -60,6 +63,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 		// ImGui受付開始
 		imguiManager->Begin();
+
+		gameScene_->Update();
+
 		// 入力関連の毎フレーム処理
 		input->Update();
 		// 軸表示の更新
@@ -67,8 +73,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// ImGui受付終了
 		imguiManager->End();
 
+
 		// 描画開始
 		dxCommon->PreDraw();
+
+		gameScene_->Draw();
+
 		// 軸表示の描画
 		axisIndicator->Draw();
 		// プリミティブ描画のリセット
