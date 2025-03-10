@@ -91,6 +91,8 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 GameScene::GameScene() {}
 
 GameScene::~GameScene() { 
+	delete player_;
+	delete skydome_;
 	delete modelBlock_;
 	delete debugCamera_;
 	delete modelSkydome_;
@@ -146,6 +148,11 @@ void GameScene::Initialize() {
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	skydome_->Initialize(modelSkydome_, debugCamera_);
+
+	player_ = new Player();
+	modelPlayer_= Model::Create();
+	textureHandlePlayer_ = TextureManager::Load("uvChecker.png");
+	player_->Initialize(modelPlayer_, textureHandlePlayer_, debugCamera_);
 }
 
 void GameScene::Update() {
@@ -185,7 +192,7 @@ void GameScene::Update() {
 		camera_.UpdateMatrix();
 	}
 #endif // _DEBUG
-
+	player_->Update();
 	skydome_->Update();
 }
 
@@ -212,6 +219,7 @@ void GameScene::Draw() {
 	}
 
 	skydome_->Draw();
+	player_->Draw();
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
