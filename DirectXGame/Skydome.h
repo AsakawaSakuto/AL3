@@ -10,7 +10,6 @@ public:
 	void Update();     // 更新
 	void Draw();       // 描画
 private:
-	DirectXCommon* dxCommon_ = nullptr;  
 	WorldTransform worldTransform_; //
 	Model* model_ = nullptr;        //
 	Camera camera_;

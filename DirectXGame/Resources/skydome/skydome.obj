@@ -1,6 +1,6 @@
 # Blender 4.3.2
 # www.blender.org
-mtllib 無題.mtl
+mtllib skydome.mtl
 o 球
 v 0.000000 0.831470 0.555570
 v 0.000000 0.555570 0.831470
