@@ -143,8 +143,9 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	textureHandleSkydome_ = TextureManager::Load("skydome/01.jpg");
 
-	skydome_->Initialize();
+	skydome_->Initialize(modelSkydome_, textureHandleSkydome_, debugCamera_);
 }
 
 void GameScene::Update() {

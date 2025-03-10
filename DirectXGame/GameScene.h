@@ -20,7 +20,7 @@ private:
 	bool isDebugCameraIsActive_ = false;                             // デバッグカメラの切り替えフラグ
 	Input* input_ = nullptr;                                         // 入力受付
 	// 
-	std::unique_ptr<Skydome> skydome_;
+	Skydome* skydome_ = nullptr;
 	Model* modelSkydome_ = nullptr;
-
+	uint32_t textureHandleSkydome_ = 0;
 };
