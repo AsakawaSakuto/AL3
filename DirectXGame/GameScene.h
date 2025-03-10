@@ -2,6 +2,7 @@
 #include <KamataEngine.h>
 using namespace KamataEngine;
 #include <vector>
+#include "Skydome.h"
 
 class GameScene {
 public:
@@ -18,4 +19,8 @@ private:
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_; // 可変個配列
 	bool isDebugCameraIsActive_ = false;                             // デバッグカメラの切り替えフラグ
 	Input* input_ = nullptr;                                         // 入力受付
+	// 
+	std::unique_ptr<Skydome> skydome_;
+	Model* modelSkydome_ = nullptr;
+
 };

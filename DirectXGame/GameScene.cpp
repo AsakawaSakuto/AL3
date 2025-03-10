@@ -93,6 +93,7 @@ GameScene::GameScene() {}
 GameScene::~GameScene() { 
 	delete model_;
 	delete debugCamera_;
+	delete modelSkydome_;
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			delete worldTransformBlock;
@@ -140,6 +141,10 @@ void GameScene::Initialize() {
 	debugCamera_ = new DebugCamera(1280, 720);
 
 	input_ = Input::GetInstance();
+
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+
+	skydome_->Initialize();
 }
 
 void GameScene::Update() {
@@ -179,6 +184,8 @@ void GameScene::Update() {
 		camera_.UpdateMatrix();
 	}
 #endif // _DEBUG
+
+	skydome_->Update();
 }
 
 void GameScene::Draw() {
@@ -202,6 +209,8 @@ void GameScene::Draw() {
 			}
 		}
 	}
+
+	skydome_->Draw();
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
