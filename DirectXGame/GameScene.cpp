@@ -91,7 +91,7 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 GameScene::GameScene() {}
 
 GameScene::~GameScene() { 
-	delete model_;
+	delete modelBlock_;
 	delete debugCamera_;
 	delete modelSkydome_;
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -106,7 +106,7 @@ void GameScene::Initialize() {
 	// 必須？
 	dxCommon_ = DirectXCommon::GetInstance();
     // 3dモデル
-	model_ = Model::Create(); 
+	modelBlock_ = Model::Create(); 
 	// 要素数
 	const uint32_t kNumBlockVirtical = 10;
 	const uint32_t kNumBlockHorizontal = 20;
@@ -142,10 +142,10 @@ void GameScene::Initialize() {
 
 	input_ = Input::GetInstance();
 
+	skydome_ = new Skydome();
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
-	textureHandleSkydome_ = TextureManager::Load("skydome/01.jpg");
 
-	skydome_->Initialize(modelSkydome_, textureHandleSkydome_, debugCamera_);
+	skydome_->Initialize(modelSkydome_, debugCamera_);
 }
 
 void GameScene::Update() {
@@ -206,7 +206,7 @@ void GameScene::Draw() {
 			if (!worldTransformBlock) {
 				continue;
 			} else {
-				model_->Draw(*worldTransformBlock, camera_);
+				modelBlock_->Draw(*worldTransformBlock, camera_);
 			}
 		}
 	}

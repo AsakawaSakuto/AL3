@@ -2,6 +2,7 @@
 #include <KamataEngine.h>
 using namespace KamataEngine;
 #include <vector>
+#include "Player.h"
 #include "Skydome.h"
 
 class GameScene {
@@ -13,7 +14,7 @@ public:
 	void Draw();       // 描画
 private:
 	DirectXCommon* dxCommon_ = nullptr;                              // 汎用
-	Model* model_ = nullptr;                                         // 3Dmodel
+	Model* modelBlock_ = nullptr;                                         // 3Dmodel
 	Camera camera_;                                                  // カメラ
 	DebugCamera* debugCamera_ = nullptr;                             // デバッグカメラ
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_; // 可変個配列
@@ -22,5 +23,8 @@ private:
 	// 
 	Skydome* skydome_ = nullptr;
 	Model* modelSkydome_ = nullptr;
-	uint32_t textureHandleSkydome_ = 0;
+	//
+	Player* player_ = nullptr;
+	Model* modelPlayer_ = nullptr;
+	uint32_t textureHandlePlayer_ = 0u;
 };
