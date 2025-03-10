@@ -50,8 +50,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	primitiveDrawer->Initialize();
 #pragma endregion
 
-	GameScene* gameScene = new GameScene();
-	gameScene->Initialize();
+	GameScene* gameScene_ = new GameScene;
+	gameScene_->Initialize();
 
 	// メインループ
 	while (true) {
@@ -63,7 +63,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// ImGui受付開始
 		imguiManager->Begin();
 
-		gameScene->Update();
+		gameScene_->Update();
 
 		// 入力関連の毎フレーム処理
 		input->Update();
@@ -75,7 +75,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// 描画開始
 		dxCommon->PreDraw();
 
-		gameScene->Draw();
+		gameScene_->Draw();
 
 		// 軸表示の描画
 		axisIndicator->Draw();
