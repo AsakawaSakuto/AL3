@@ -1,6 +1,6 @@
 #include "GameScene.h"
 
-#pragma region
+#pragma region Matrix
 // 積
 Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 	Matrix4x4 result{};
@@ -105,14 +105,29 @@ GameScene::~GameScene() {
 }
 
 void GameScene::Initialize() {
-	// 必須？
-	dxCommon_ = DirectXCommon::GetInstance();
-    // 3dモデル
-	modelBlock_ = Model::Create(); 
+	dxCommon_ = DirectXCommon::GetInstance(); // 必須？
+	input_ = Input::GetInstance();            // 入力
+
+	/*-----------
+        カメラ	
+	-----------*/
+	camera_.Initialize();                                        // カメラの初期化
+	PrimitiveDrawer::GetInstance()->SetViewProjection(&camera_);
+	debugCamera_ = new DebugCamera(1280, 720);                   // デバッグカメラの生成
+	
+
+	/*-----------
+	   ブロック
+	-----------*/
+
+	// 3dモデル
+    modelBlock_ = Model::Create();
+
 	// 要素数
 	const uint32_t kNumBlockVirtical = 10;
 	const uint32_t kNumBlockHorizontal = 20;
-    // ブロック1個の幅
+
+	// ブロック1個の幅
 	const float kBlockWidth = 2.f;
 	const float kBlockHeight = 2.f;
 	
@@ -135,28 +150,26 @@ void GameScene::Initialize() {
 		}
 	}
 
-	// カメラの初期化
-	camera_.Initialize();
-	PrimitiveDrawer::GetInstance()->SetViewProjection(&camera_);
+	/*-----------
+	     天球
+	-----------*/
+	skydome_ = new Skydome();                              // new 
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true); // モデル読み込み
+	skydome_->Initialize(modelSkydome_, debugCamera_);     // 初期化
 
-	// デバッグカメラの生成
-	debugCamera_ = new DebugCamera(1280, 720);
-
-	input_ = Input::GetInstance();
-
-	skydome_ = new Skydome();
-	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
-
-	skydome_->Initialize(modelSkydome_, debugCamera_);
-
-	player_ = new Player();
-	modelPlayer_= Model::Create();
-	textureHandlePlayer_ = TextureManager::Load("uvChecker.png");
-	player_->Initialize(modelPlayer_, textureHandlePlayer_, debugCamera_);
+	/*-----------
+	  プレイヤー
+	-----------*/
+	player_ = new Player();                                                // new
+	modelPlayer_= Model::Create();                                         // モデル生成
+	textureHandlePlayer_ = TextureManager::Load("uvChecker.png");          // 画像読み込み
+	player_->Initialize(modelPlayer_, textureHandlePlayer_, debugCamera_); // 初期化
 }
 
 void GameScene::Update() {
-	// ブロックの更新
+	/*-----------
+	 ブロックの更新
+	-----------*/ 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock) {
@@ -171,10 +184,18 @@ void GameScene::Update() {
 			}
 		}
 	}
-	
-#ifdef _DEBUG // カメラの処理
-	// SPACEでフラグの切り替え
-	if (input_->TriggerKey(DIK_SPACE)) {
+
+	// プレイヤー更新
+	player_->Update();
+
+	// 天球更新
+	skydome_->Update();
+
+	/*----------
+	 カメラの処理
+	----------*/
+#ifdef _DEBUG
+	if (input_->TriggerKey(DIK_SPACE)) { // SPACEでフラグの切り替え
 		if (isDebugCameraIsActive_) {
 			isDebugCameraIsActive_ = false;
 		} else {
@@ -182,18 +203,14 @@ void GameScene::Update() {
 		}
 	}
 	if (isDebugCameraIsActive_) {
-		debugCamera_->Update();
-		camera_.matView = debugCamera_->GetCamera().matView;
-		camera_.matProjection = debugCamera_->GetCamera().matProjection;
-		// カメラ行列の転送
-		camera_.TransferMatrix();
+		debugCamera_->Update();                                          // デバッグカメラ更新
+		camera_.matView = debugCamera_->GetCamera().matView;             // ビュー行列を代入
+		camera_.matProjection = debugCamera_->GetCamera().matProjection; // プロジェクション行列を代入
+		camera_.TransferMatrix();                                        // カメラ行列の転送
 	} else {
-		// カメラ行列の更新と転送
-		camera_.UpdateMatrix();
+		camera_.UpdateMatrix();                                          // カメラ行列の更新と転送
 	}
 #endif // _DEBUG
-	player_->Update();
-	skydome_->Update();
 }
 
 void GameScene::Draw() {
@@ -218,8 +235,8 @@ void GameScene::Draw() {
 		}
 	}
 
-	skydome_->Draw();
-	player_->Draw();
+	skydome_->Draw(); // 天球
+	player_->Draw();  // プレイヤー
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
