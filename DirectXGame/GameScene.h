@@ -4,6 +4,7 @@ using namespace KamataEngine;
 #include <vector>
 #include "Player.h"
 #include "Skydome.h"
+#include "MapCipField.h"
 
 class GameScene {
 public:
@@ -31,4 +32,8 @@ private:
 	Player* player_ = nullptr;          // クラス
 	Model* modelPlayer_ = nullptr;      // 3dモデル
 	uint32_t textureHandlePlayer_ = 0u; // 画像ハンドル
+
+	// マップチップ
+	MapChipField* mapChipField_ = nullptr;
+	void GenerateBlocks(); // ブロックの生成
 };
