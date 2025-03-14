@@ -135,10 +135,9 @@ void GameScene::Initialize() {
 	  プレイヤー
 	-----------*/
 	player_ = new Player();                                                // new
-	modelPlayer_= Model::Create();                                         // モデル生成
-	textureHandlePlayer_ = TextureManager::Load("uvChecker.png");          // 画像読み込み
+	modelPlayer_ = Model::CreateFromOBJ("player", true);                   // モデル生成
 	Vector3 playerPos = mapChipField_->GetMapChipPositionByIndex(1, 18);
-	player_->Initialize(modelPlayer_, textureHandlePlayer_, debugCamera_, playerPos); // 初期化
+	player_->Initialize(modelPlayer_, debugCamera_, playerPos); // 初期化
 
 	/*-----------
 	  マップチップ
