@@ -15,7 +15,7 @@ public:
 	/// <summary>
 	/// 初期化
 	/// </summary>
-	void Initialize(Model* model, DebugCamera* camera, const Vector3& pos);
+	void Initialize(Model* model, Camera* camera, const Vector3& pos);
 
 	/// <summary>
 	/// 更新
@@ -26,6 +26,10 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
+
+	const WorldTransform& GetWorldTransform() { return worldTransform_; }
+
+	const Vector3& GetVelocity() const { return velocity_; }
 
 private:
 	// 移動の処理
@@ -40,9 +44,9 @@ private:
 	// イージング
 	float EaseInOutSide(float easing);
 
-	WorldTransform worldTransform_; // ワールド変換データ
+	WorldTransform worldTransform_ = {}; // ワールド変換データ
 	Model* model_ = nullptr;        // モデル
-	DebugCamera* camera_ = nullptr; // デバッグカメラ
+	Camera* camera_ = nullptr; // デバッグカメラ
 	Input* input_ = nullptr;        // 入力
 	Vector3 velocity_ = {};         // 速度
 
@@ -60,4 +64,5 @@ private:
 	static inline const float kGravityAcceleration = 0.1f; // 重力加速度(下)
 	static inline const float kLimitFallSpeed = 0.1f;      // 最大落下速度(下)
 	static inline const float kJumpAcceleration = 1.f;     // ジャンプ初速(上)
+
 };

@@ -97,6 +97,7 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	delete modelSkydome_;
 	delete mapChipField_;
+	delete cameraController_;
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			delete worldTransformBlock;
@@ -137,7 +138,7 @@ void GameScene::Initialize() {
 	player_ = new Player();                                                // new
 	modelPlayer_ = Model::CreateFromOBJ("player", true);                   // モデル生成
 	Vector3 playerPos = mapChipField_->GetMapChipPositionByIndex(1, 18);
-	player_->Initialize(modelPlayer_, debugCamera_, playerPos); // 初期化
+	player_->Initialize(modelPlayer_, &camera_, playerPos); // 初期化
 
 	/*-----------
 	  マップチップ
@@ -145,6 +146,11 @@ void GameScene::Initialize() {
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 	GenerateBlocks();
+
+	cameraController_ = new CameraController;
+	cameraController_->Initialize();
+	cameraController_->SetTarget(player_);
+	cameraController_->Reset();
 }
 
 void GameScene::Update() {
@@ -175,6 +181,7 @@ void GameScene::Update() {
 	/*----------
 	 カメラの処理
 	----------*/
+	
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_SPACE)) { // SPACEでフラグの切り替え
 		if (isDebugCameraIsActive_) {
@@ -189,7 +196,9 @@ void GameScene::Update() {
 		camera_.matProjection = debugCamera_->GetCamera().matProjection; // プロジェクション行列を代入
 		camera_.TransferMatrix();                                        // カメラ行列の転送
 	} else {
-		camera_.UpdateMatrix();                                          // カメラ行列の更新と転送
+		cameraController_->Update();                                     // カメラ行列の更新と転送
+		camera_.translation_ = cameraController_->GetCamera().translation_;
+		camera_.UpdateMatrix();
 	}
 #endif // _DEBUG
 }

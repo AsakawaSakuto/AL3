@@ -5,6 +5,7 @@ using namespace KamataEngine;
 #include "Player.h"
 #include "Skydome.h"
 #include "MapCipField.h"
+#include "CameraController.h"
 
 class GameScene {
 public:
@@ -36,4 +37,7 @@ private:
 	// マップチップ
 	MapChipField* mapChipField_ = nullptr;
 	void GenerateBlocks(); // ブロックの生成
+
+	//
+	CameraController* cameraController_ = nullptr;
 };

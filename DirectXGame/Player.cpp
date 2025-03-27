@@ -204,7 +204,7 @@ void Player::TurnControl() {
 	}
 }
 
-void Player::Initialize(Model* model, DebugCamera* camera, const Vector3& pos) {
+void Player::Initialize(Model* model, Camera* camera, const Vector3& pos) {
 	// NULLポインタチェック
 	assert(model);
 	// 引数をメンバ変数に記録
@@ -242,5 +242,5 @@ void Player::Update() {
 }
 
 void Player::Draw() { 
-	model_->Draw(worldTransform_, camera_->GetCamera()); 
+	model_->Draw(worldTransform_, *camera_); 
 }

@@ -10,6 +10,16 @@ struct Vector3 final {
 	float y;
 	float z;
 
+	Vector3 operator+(const Vector3& num) const{ 
+
+		Vector3 sc{x, y, z};
+
+		sc.x = this->x + num.x;
+		sc.y = this->y + num.y;
+		sc.z = this->z + num.z;
+		return sc;
+	}
+
 	/// <summary>
 	/// 複合加算演算子の作成
 	/// </summary>
