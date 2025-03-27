@@ -110,47 +110,35 @@ void GameScene::Initialize() {
 	dxCommon_ = DirectXCommon::GetInstance(); // 必須？
 	input_ = Input::GetInstance();            // 入力
 
-	/*-----------
-        カメラ	
-	-----------*/
+	// カメラ
 	camera_.Initialize();                                        // カメラの初期化
 	PrimitiveDrawer::GetInstance()->SetViewProjection(&camera_);
 	debugCamera_ = new DebugCamera(1280, 720);                   // デバッグカメラの生成
 	
+	// カメラコントローラー
+	cameraController_ = new CameraController;
+	cameraController_->Initialize();
+	cameraController_->SetTarget(player_);
+	cameraController_->Reset();
 
-	/*-----------
-	   ブロック
-	-----------*/
-
-	// 3dモデル
+	// ブロック3dモデル
     modelBlock_ = Model::Create();
 
-	/*-----------
-	     天球
-	-----------*/
+	// 天球
 	skydome_ = new Skydome();                              // new 
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true); // モデル読み込み
 	skydome_->Initialize(modelSkydome_, debugCamera_);     // 初期化
 
-	/*-----------
-	  プレイヤー
-	-----------*/
+	// プレイヤー
 	player_ = new Player();                                                // new
 	modelPlayer_ = Model::CreateFromOBJ("player", true);                   // モデル生成
 	Vector3 playerPos = mapChipField_->GetMapChipPositionByIndex(1, 18);
 	player_->Initialize(modelPlayer_, &camera_, playerPos); // 初期化
 
-	/*-----------
-	  マップチップ
-	-----------*/
+	// マップチップ
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 	GenerateBlocks();
-
-	cameraController_ = new CameraController;
-	cameraController_->Initialize();
-	cameraController_->SetTarget(player_);
-	cameraController_->Reset();
 }
 
 void GameScene::Update() {
