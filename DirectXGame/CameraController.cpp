@@ -1,9 +1,13 @@
 #include "CameraController.h"
 #include "Player.h"
+#include <algorithm>
+#include <cmath>
+
 void CameraController::Initialize() {
 	// カメラの初期化
 	camera_.Initialize();
-	PrimitiveDrawer::GetInstance()->SetViewProjection(&camera_);
+	/*PrimitiveDrawer::GetInstance()->SetViewProjection(&camera_);*/
+	moveArea_ = {10.f, 187.5f, 5.f, 20.f};
 }
 
 void CameraController::Update() {
@@ -37,6 +41,11 @@ void CameraController::Update() {
 }
 
 void CameraController::Reset() { 
+	// 追従対象のワールドトランスフォームを参照
 	const WorldTransform& targetWorldTransform = target_->GetWorldTransform();
-	camera_.translation_ = targetWorldTransform.translation_ + targetOffset_;
+
+	// 追従対象とオフセットからカメラの座標を計算
+	camera_.translation_.x = targetWorldTransform.translation_.x + targetOffset_.x;
+	camera_.translation_.y = targetWorldTransform.translation_.y + targetOffset_.y;
+	camera_.translation_.z = targetWorldTransform.translation_.z + targetOffset_.z;
 }

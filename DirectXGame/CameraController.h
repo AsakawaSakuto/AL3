@@ -62,7 +62,7 @@ private:
 	Vector3 targetOffset_ = {0.f, 0.f, -15.f};
 
 	// カメラ移動範囲
-	Rect moveArea_ = {0.f, 100.f, 0.f, 100.f};
+	Rect moveArea_ = {};
 
 	// カメラの目標座標
 	Vector3 targetPos_{};

@@ -115,12 +115,6 @@ void GameScene::Initialize() {
 	PrimitiveDrawer::GetInstance()->SetViewProjection(&camera_);
 	debugCamera_ = new DebugCamera(1280, 720);                   // デバッグカメラの生成
 	
-	// カメラコントローラー
-	cameraController_ = new CameraController;
-	cameraController_->Initialize();
-	cameraController_->SetTarget(player_);
-	cameraController_->Reset();
-
 	// ブロック3dモデル
     modelBlock_ = Model::Create();
 
@@ -139,6 +133,12 @@ void GameScene::Initialize() {
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 	GenerateBlocks();
+
+	// カメラコントローラー
+	cameraController_ = new CameraController;
+	cameraController_->Initialize();
+	cameraController_->SetTarget(player_);
+	cameraController_->Reset();
 }
 
 void GameScene::Update() {
